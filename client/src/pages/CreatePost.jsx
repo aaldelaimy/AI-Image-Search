@@ -29,7 +29,7 @@ const CreatePost = () => {
 
         const data = await response.json();
 
-        setform({ ...form, photo: `data:image/jpeg;based64, ${data.photo}`})
+        setform({ ...form, photo: `data:image/jpeg;base64, ${data.photo}`})
       } catch (error) {
         alert(error);
       } finally{
@@ -44,7 +44,7 @@ const CreatePost = () => {
     e.preventDefault();
 
     if(form.prompt && form.photo) {
-      setLoading(true)
+      setLoading(true);
 
       try {
         const response = await fetch('http://localhost:8080/api/v1/post', {
@@ -52,18 +52,26 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(form)
-        })
+          body: JSON.stringify({
+            name: form.name,
+            prompt: form.prompt,
+            photo: form.photo
+          })
+        });
 
-        await response.json();
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to create post');
+        }
+        
         navigate('/');
       } catch (err) {
-        alert(err)
+        alert(err.message || 'Something went wrong');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     } else {
-      alert('Please enter a prompt and generate an image')
+      alert('Please enter a prompt and generate an image');
     }
   }
 
