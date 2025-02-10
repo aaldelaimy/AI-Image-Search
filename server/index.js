@@ -9,7 +9,17 @@ import dalleRoutes from './routes/dalleRoutes.js'
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Add CORS configuration
+app.use(cors({
+    origin: [
+        'https://ai-image-search-five.vercel.app',
+        'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true
+}));
+
 app.use(express.json({ limit: '50mb' }));
 
 app.use('/api/v1/post', postRoutes)

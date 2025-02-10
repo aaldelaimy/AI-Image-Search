@@ -1,12 +1,23 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
 import { v2 as cloudinary } from 'cloudinary'
+import cors from 'cors'
 
 import Post from '../mongodb/models/post.js'
 
 dotenv.config();
 
 const router = express.Router();
+
+// Add CORS configuration
+router.use(cors({
+    origin: [
+        'https://ai-image-search-five.vercel.app',
+        'http://localhost:5173' // Keep local development working
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
